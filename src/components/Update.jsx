@@ -71,7 +71,7 @@ const Update = () => {
     const handleSubmitUpdate = (e) => {
         e.preventDefault()
         console.log(rifleToUpdate)
-        if (confirm("¿Estás seguro de que quieres borrar esta arma?")) {
+        if (confirm("¿Estás seguro de que quieres actualizar esta arma?")) {
             axios.put(`${API_URL}/`, rifleToUpdate)
                 .then(({ data }) => {
                     console.log(data)

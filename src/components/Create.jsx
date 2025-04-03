@@ -38,7 +38,8 @@ const Create = () => {
         axios.post(`${API_URL}/`, newRifle)
             .then(({ data }) => {
             console.log(data)
-            setRifles([...rifles, data])
+            const { dano, ...restData } = data
+            setRifles([...rifles, {...restData, daño: dano}])
             setNewRifle({
                 nombre: '',
                 daño: '',
