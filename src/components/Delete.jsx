@@ -2,25 +2,33 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import "../styles/crud.css"
 
+const API_URL = 'http://localhost:8080/Arma'
+
 const Delete = () => { 
     const [delRifle, setDelRifle] = useState({
         nombre: '',
         tipo: 'Rifle',
     })
 
-    const [rifles, setRifles] = useState([])
+    const [rifle, setRifle] = useState({})
 
     useEffect(() => {
-        axios.get('http://localhost:8080/Arma/')
+        axios.post(`${API_URL}/buscarNombre`, { nombre: delRifle.nombre })
             .then(({ data }) => {
                 console.log(data)
-                setRifles(data)
+                setRifle(data)
             })
-            .catch(error => {
-                console.error("Error al traer los datos", error)
+            .catch((error) => {
+                const { message, response, status } = error
+                if (status === 404) {
+                    setRifle({})  
+                }  
+                console.log(response.data)
+                console.error("Error al traer los datos", message)
             })
-    }, [])
 
+    },[delRifle.nombre])
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setDelRifle(prevRifle => ({
@@ -31,40 +39,43 @@ const Delete = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(delRifle)
-        axios.delete('http://localhost:8080/Arma/', { data: delRifle })
-            .then(({ data, status }) => {
-                console.log(data)
-                console.log(status)
-                if (status === 200) {
+        const data = { indice: rifle.index, tipo: rifle.tipo = delRifle.tipo }
+        if (confirm("¿Estás seguro de que quieres borrar esta arma?")) {
+            axios.delete(`${API_URL}/`, { data: data })
+            .then(({ status }) => {
+                if (status === 202) {
                     alert('Se elimino correctamente')
                 } 
-                setRifles(data)
                 setDelRifle({
                     nombre: '',
                     tipo: 'Rifle',
                 })
+                setRifle({})
             })
             .catch(error => {
                 console.error("Error al eliminar:", error)
             }
         )
+        } else {
+            console.log("Acción cancelada");
+            return
+        }
     }
 
     return (
     <div className='container'>
         <div className='container-content'>
-            <h1>Form</h1>
+            <h1>Buscar rifle</h1>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Nombre</label>
                     <input name="nombre" value={delRifle.nombre} onChange={handleInputChange} type="text" />
                 </div>
-                <button className='btnSubmit' type='submit'>Enviar</button>
+                <button className='btnSubmit' type='submit'>Eliminar</button>
             </form>
         </div>
         <div className='container-content'>
-            <h1>Rifles</h1>
+            <h1>Rifle Encontrado</h1>
             <table>
                 <thead>
                 <tr>
@@ -81,28 +92,29 @@ const Delete = () => {
                 <tbody>
                 {
                 (() => {
-                    const filteredRifles = rifles.filter(r => r.nombre === delRifle.nombre);
-                    
-                    if (filteredRifles.length === 0) {
-                    return (
-                        <tr>
-                        <td colSpan="8" style={{textAlign: "center"}}>No se encontraron rifles con ese nombre</td>
-                        </tr>
-                    )
+                    if (Object.keys(rifle).length !== 0) {
+                        return (
+                            <tr key={rifle.index}>
+                                <td>{rifle.nombre}</td>
+                                <td>{rifle.cadenciaDisparo}</td>
+                                <td>{rifle.capMunicion}</td>
+                                <td>{rifle.dano}</td>
+                                <td>{rifle.fechaCreacion}</td>
+                                <td>{rifle.municion}</td>
+                                <td>{rifle.velocidad}</td>
+                                <td>{rifle.vida}</td>
+                            </tr>
+                        )
+                    } else {
+                        return (
+                            <tr>
+                            <td colSpan="8" style={{textAlign: "center"}}>No hay rifles en este momento</td>
+                            </tr>
+                        )
                     }
                     
-                    return filteredRifles.map((rifle, index) => (
-                    <tr key={index}>
-                        <td>{rifle.nombre}</td>
-                        <td>{rifle.cadenciaDisparo}</td>
-                        <td>{rifle.capMunicion}</td>
-                        <td>{rifle.daño}</td>
-                        <td>{rifle.fechaCreacion}</td>
-                        <td>{rifle.municion}</td>
-                        <td>{rifle.velocidad}</td>
-                        <td>{rifle.vida}</td>
-                    </tr>
-                    ))
+                    
+                    
                 })()
                 }
                 </tbody>

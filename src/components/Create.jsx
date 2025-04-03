@@ -4,9 +4,10 @@ import MyCalendar from './Calendar.jsx'
 import 'react-calendar/dist/Calendar.css'
 import "../styles/crud.css"
 
-const numberInputs = ['daño', 'municion', 'vida', 'velocidad']
+const NUMBER_INPUTS = ['daño', 'municion', 'vida', 'velocidad']
+const API_URL = 'http://localhost:8080/Arma'
 
-const CreateRead = () => { 
+const Create = () => { 
     const [newRifle, setNewRifle] = useState({
         nombre: '',
         daño: '',
@@ -18,21 +19,23 @@ const CreateRead = () => {
     const [rifles, setRifles] = useState([])
     
     useEffect(() => {
-    axios.get('http://localhost:8080/Arma/')
+    axios.get(`${API_URL}/`)
         .then(({ data }) => {
         console.log("data del get:")
         console.log(data)
         setRifles(data)
         })
-        .catch(error => {
-            console.error("Error al traer los datos", error)
+        .catch((error) => {
+            const { message, response } = error
+            console.log(response.data)
+            console.error("Error al traer los datos", message)
         })
     }, [])
 
     const handleSubmit = (event) => {
         event.preventDefault()
         console.log(newRifle)
-        axios.post('http://localhost:8080/Arma/', newRifle)
+        axios.post(`${API_URL}/`, newRifle)
             .then(({ data }) => {
             console.log(data)
             setRifles([...rifles, data])
@@ -51,8 +54,8 @@ const CreateRead = () => {
     const { name, value } = e.target
 
     let parsedValue = value.trim()
-    if (numberInputs.includes(name)) {
-        parsedValue = parseInt(value)
+    if (NUMBER_INPUTS.includes(name)) {
+        parsedValue = parseInt(parsedValue)
     }
 
     setNewRifle(prevRifle => ({
@@ -72,7 +75,7 @@ const CreateRead = () => {
     return (
     <div className='container'>
         <div className='container-content'>
-        <h1>Form</h1>
+        <h1>Formulario para rifle</h1>
             <form onSubmit={handleSubmit}>
                 <div>
                 <label>Nombre</label>
@@ -80,19 +83,19 @@ const CreateRead = () => {
                 </div>
                 <div>
                 <label>Daño</label>
-                <input name="daño" value={newRifle.daño} onChange={handleInputChange} type="number" min="1" step="1"/>
+                <input name="daño" value={newRifle.daño === "" ? "" : newRifle.daño || ""} onChange={handleInputChange} type="number" min="0" step="1"/>
                 </div>
                 <div>
                 <label>Munición</label>
-                <input name="municion" value={newRifle.municion} onChange={handleInputChange} type="number" min="1" step="1" />
+                <input name="municion" value={newRifle.municion === "" ? "" : newRifle.municion || ""} onChange={handleInputChange} type="number" min="1" step="1" />
                 </div>
                 <div>
                 <label>Vida</label>
-                <input name="vida" value={newRifle.vida} onChange={handleInputChange} type="number" min="1" step="1" />
+                <input name="vida" value={newRifle.vida === "" ? "" : newRifle.vida || ""} onChange={handleInputChange} type="number" min="1" step="1" />
                 </div>
                 <div>
                 <label>Velocidad</label>
-                <input name="velocidad" value={newRifle.velocidad} onChange={handleInputChange} type="number" min="1" step="1" />
+                <input name="velocidad" value={newRifle.velocidad === "" ? "" : newRifle.velocidad || ""} onChange={handleInputChange} type="number" min="1" step="1" />
                 </div>
                 <div className='calendar-container'>
                 <label>Fecha de creación</label>
@@ -103,7 +106,7 @@ const CreateRead = () => {
             </form>
         </div>
         <div className='container-content'>
-        <h1>Rifles</h1>
+        <h1>Rifles actuales</h1>
         <table>
             <thead>
             <tr>
@@ -147,4 +150,4 @@ const CreateRead = () => {
     </div>
     )
 }
-export default CreateRead
+export default Create

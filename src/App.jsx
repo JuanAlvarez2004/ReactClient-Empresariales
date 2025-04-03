@@ -1,6 +1,8 @@
 import React from 'react'
 import { Routes, Route, Link } from 'react-router-dom';
-import CreateRead from './components/CreateRead.jsx';
+import Create from './components/Create.jsx';
+import Read from './components/Read.jsx';
+import Update from './components/Update.jsx';
 import Delete from './components/Delete.jsx'
 import './styles/app.css';
 
@@ -25,7 +27,10 @@ const App = () => {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/create_read">Create-Read</Link>
+            <Link to="/create">Create</Link>
+          </li>
+          <li>
+            <Link to="/read">Read</Link>
           </li>
           <li>
             <Link to="/update">Update</Link>
@@ -38,7 +43,9 @@ const App = () => {
 
       <Routes>
         <Route path='/' element={<HomePage />} />
-        <Route path="/create_read" element={<CreateRead />} />
+        <Route path="/create" element={<Create />} />
+        <Route path="/read" element={<Read />} />
+        <Route path="/update" element={<Update />} />
         <Route path="/delete" element={<Delete />} />
       </Routes>
     </div>

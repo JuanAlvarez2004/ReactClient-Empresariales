@@ -2,6 +2,15 @@
     display: flex;
 }
 
+#read-container {
+    flex-direction: column;
+    align-items: center;
+}
+
+.read-container {
+    display: flex;
+}
+
 h1 {
     text-align: center;
     font-size: 2rem;
@@ -12,6 +21,7 @@ h1 {
     border: 1px solid #fff;
     border-radius: 20px;
 }
+
 
 .container-content {
     margin: 20px;
@@ -35,7 +45,7 @@ form div label {
     font-family: sans-serif;
 }
 
-form div input {
+input {
     margin-bottom: 10px;
     background-color: transparent;
     border: none;
