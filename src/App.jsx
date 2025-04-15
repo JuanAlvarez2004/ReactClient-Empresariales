@@ -1,8 +1,9 @@
 import React from 'react'
-import { Routes, Route, Link } from 'react-router-dom';
-import Create from './components/Create.jsx';
-import Read from './components/Read.jsx';
-import Update from './components/Update.jsx';
+import { Routes, Route, Link } from 'react-router-dom'
+import Create from './components/Create.jsx'
+import List from './components/List.jsx'
+import Filter from './components/Filter.jsx'
+import Update from './components/Update.jsx'
 import Delete from './components/Delete.jsx'
 import './styles/app.css';
 
@@ -24,13 +25,16 @@ const App = () => {
       <nav>
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/"><img src="/home.svg" alt="home" /></Link>
           </li>
           <li>
             <Link to="/create">Create</Link>
           </li>
           <li>
-            <Link to="/read">Read</Link>
+            <Link to="/list">List</Link>
+          </li>
+          <li>
+            <Link to="/filter">Filter</Link>
           </li>
           <li>
             <Link to="/update">Update</Link>
@@ -44,9 +48,11 @@ const App = () => {
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path="/create" element={<Create />} />
-        <Route path="/read" element={<Read />} />
+        <Route path="/list" element={<List />} />
+        <Route path="/filter" element={<Filter />} />
         <Route path="/update" element={<Update />} />
         <Route path="/delete" element={<Delete />} />
+        
       </Routes>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import MyCalendar from './Calendar.jsx' 
 import 'react-calendar/dist/Calendar.css'
@@ -16,39 +16,26 @@ const Create = () => {
         velocidad: '',
         fechaCreacion: new Date().toISOString(),
       })
-    const [rifles, setRifles] = useState([])
-    
-    useEffect(() => {
-    axios.get(`${API_URL}/`)
-        .then(({ data }) => {
-        console.log("data del get:")
-        console.log(data)
-        setRifles(data)
-        })
-        .catch((error) => {
-            const { message, response } = error
-            console.log(response.data)
-            console.error("Error al traer los datos", message)
-        })
-    }, [])
 
     const handleSubmit = (event) => {
         event.preventDefault()
         console.log(newRifle)
         axios.post(`${API_URL}/`, newRifle)
             .then(({ data }) => {
-            console.log(data)
-            const { dano, ...restData } = data
-            setRifles([...rifles, {...restData, daño: dano}])
-            setNewRifle({
-                nombre: '',
-                daño: '',
-                municion: '',
-                vida: '',
-                velocidad: '',
-                fechaCreacion: new Date().toISOString(),
+                console.log(data)
+                alert("Rifle creado correctamente")
+                setNewRifle({
+                    nombre: '',
+                    daño: '',
+                    municion: '',
+                    vida: '',
+                    velocidad: '',
+                    fechaCreacion: new Date().toISOString(),
+                })
+            }).catch((error) => {
+                alert("Error al crear el rifle")
+                console.error("Error al crear el rifle:", error)
             })
-        })
     }
 
     const handleInputChange = (e) => {
@@ -105,48 +92,6 @@ const Create = () => {
                 </div>
                 <button className='btnSubmit' type='submit'>Enviar</button>
             </form>
-        </div>
-        <div className='container-content'>
-        <h1>Rifles actuales</h1>
-        <table>
-            <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Cadencia disparo</th>
-                <th>Cap. Municion</th>
-                <th>Daño</th>
-                <th>Fecha Creacion</th>
-                <th>Munición</th>
-                <th>Velocidad</th>
-                <th>Vida</th>
-            </tr>
-            </thead>
-            <tbody>
-            {
-            (() => {
-                if (rifles.length > 0) {
-                    return (rifles.map((rifle, index) => (
-                        <tr key={index}>
-                        <td>{rifle.nombre}</td>
-                        <td>{rifle.cadenciaDisparo}</td>
-                        <td>{rifle.capMunicion}</td>
-                        <td>{rifle.daño}</td>
-                        <td>{rifle.fechaCreacion}</td>
-                        <td>{rifle.municion}</td>
-                        <td>{rifle.velocidad}</td>
-                        <td>{rifle.vida}</td>
-                        </tr>
-                    )))
-                }
-                return (
-                    <tr>
-                    <td colSpan="8" style={{textAlign: "center"}}>No hay rifles en este momento</td>
-                    </tr>
-                )
-            })()
-            }
-            </tbody>
-        </table>
         </div>
     </div>
     )

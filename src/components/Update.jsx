@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import MyCalendar from './Calendar.jsx'
 import "../styles/crud.css"
@@ -12,7 +12,7 @@ const Update = () => {
     const [rifleFound, setRifleFound] = useState(null)
     const [rifleToUpdate, setRifleToUpdate] = useState({})
 
-    useEffect(() => {
+    const handleFindRifle = () => {
         if (!searchName.trim()) return
         
         axios.post(`${API_URL}/buscarNombre`, { nombre: searchName })
@@ -23,7 +23,7 @@ const Update = () => {
             setRifleFound(null)
             console.error("Error al buscar rifle:", error)
         })
-    }, [searchName])
+    }
 
     const handleSearchChange = (e) => {
         setSearchName(e.target.value)
@@ -93,8 +93,9 @@ const Update = () => {
         <div className='container-content'>
             <h2>Buscar Rifle</h2>
             <div className='search-form'>
-            <label htmlFor="search-name">Nombre del Rifle:</label>
-            <input id="search-name" name="searchName" value={searchName} onChange={handleSearchChange} type="text" />
+                <label htmlFor="search-name">Nombre del Rifle:</label>
+                <input id="search-name" name="searchName" value={searchName} onChange={handleSearchChange} type="text" />
+                <button className='btnSubmit' onClick={handleFindRifle}>Buscar</button>
             </div>
             {
             (() => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import "../styles/crud.css"
 
@@ -12,7 +12,7 @@ const Delete = () => {
 
     const [rifle, setRifle] = useState({})
 
-    useEffect(() => {
+    const handleFindRifle = () => {
         axios.post(`${API_URL}/buscarNombre`, { nombre: delRifle.nombre })
             .then(({ data }) => {
                 console.log(data)
@@ -23,11 +23,11 @@ const Delete = () => {
                 if (status === 404) {
                     setRifle({})  
                 }  
+                alert(response.data)
                 console.log(response.data)
                 console.error("Error al traer los datos", message)
             })
-
-    },[delRifle.nombre])
+    }
     
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -37,8 +37,13 @@ const Delete = () => {
         }))
     }
 
-    const handleSubmit = (e) => {
+    const handleDelete = (e) => {
         e.preventDefault()
+        if (Object.keys(rifle).length === 0) {
+            alert("No hay ningún rifle a eliminar")
+            return
+        } 
+
         const data = { indice: rifle.index, tipo: rifle.tipo = delRifle.tipo }
         if (confirm("¿Estás seguro de que quieres borrar esta arma?")) {
             axios.delete(`${API_URL}/`, { data: data })
@@ -66,13 +71,11 @@ const Delete = () => {
     <div className='container'>
         <div className='container-content'>
             <h1>Buscar rifle</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Nombre</label>
-                    <input name="nombre" value={delRifle.nombre} onChange={handleInputChange} type="text" />
-                </div>
-                <button className='btnSubmit' type='submit'>Eliminar</button>
-            </form>
+            <div>
+                <label>Nombre</label>
+                <input name="nombre" value={delRifle.nombre} onChange={handleInputChange} type="text" />
+            </div>
+            <button className='btnSubmit' type='submit' onClick={handleFindRifle}>Buscar</button>
         </div>
         <div className='container-content'>
             <h1>Rifle Encontrado</h1>
@@ -119,6 +122,9 @@ const Delete = () => {
                 }
                 </tbody>
             </table>
+            <form onSubmit={handleDelete}>
+                <button className='btnSubmit' type='submit'>Eliminar</button>    
+            </form>
         </div>
     </div>
     )
