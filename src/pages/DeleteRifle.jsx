@@ -4,7 +4,7 @@ import "../styles/crud.css"
 
 const API_URL = 'http://localhost:8080/Arma'
 
-const Delete = () => { 
+const DeleteRifle = () => { 
     const [delRifle, setDelRifle] = useState({
         nombre: '',
         tipo: 'Rifle',
@@ -15,7 +15,7 @@ const Delete = () => {
     const handleFindRifle = () => {
         axios.post(`${API_URL}/buscarNombre`, { nombre: delRifle.nombre })
             .then(({ data }) => {
-                console.log(data)
+                console.log("Data del find rifle", data)
                 setRifle(data)
             })
             .catch((error) => {
@@ -73,7 +73,7 @@ const Delete = () => {
             <h1>Buscar rifle</h1>
             <div>
                 <label>Nombre</label>
-                <input name="nombre" value={delRifle.nombre} onChange={handleInputChange} type="text" />
+                <input name="nombre" value={delRifle.nombre} onChange={handleInputChange} type="text" required/>
             </div>
             <button className='btnSubmit' type='submit' onClick={handleFindRifle}>Buscar</button>
         </div>
@@ -83,13 +83,14 @@ const Delete = () => {
                 <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Cadencia disparo</th>
                     <th>Cap. Municion</th>
-                    <th>Daño</th>
+                    <th>Daño</th> 
                     <th>Fecha Creacion</th>
-                    <th>Munición</th>
+                    <th>Munición</th> 
                     <th>Velocidad</th>
                     <th>Vida</th>
+                    <th>Distancia</th>
+                    <th>Tipo munición</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -99,19 +100,32 @@ const Delete = () => {
                         return (
                             <tr key={rifle.index}>
                                 <td>{rifle.nombre}</td>
-                                <td>{rifle.cadenciaDisparo}</td>
                                 <td>{rifle.capMunicion}</td>
-                                <td>{rifle.dano}</td>
+                                <td>{rifle.daño}</td>
                                 <td>{rifle.fechaCreacion}</td>
                                 <td>{rifle.municion}</td>
                                 <td>{rifle.velocidad}</td>
                                 <td>{rifle.vida}</td>
+                                <td>{rifle.distancia}</td>
+                                <td>{
+                                    (() => {
+                                        if (rifle.tipoMunicion === null) {
+                                            return <span style={{color: "red"}}>No hay munición (Arma Inútil)</span>
+                                        }
+                                        const {cadencia, dañoArea, nombre} = rifle.tipoMunicion
+                                        return <>
+                                            <li style={{listStyleType: 'circle'}}>Cadencia: {cadencia}</li>
+                                            <li style={{listStyleType: 'circle'}}>Daño Area: {dañoArea ? "true" : "false"}</li>
+                                            <li style={{listStyleType: 'circle'}}>Nombre: {nombre}</li>
+                                        </>
+                                    })()
+                                }</td>
                             </tr>
                         )
                     } else {
                         return (
                             <tr>
-                            <td colSpan="8" style={{textAlign: "center"}}>No hay rifles en este momento</td>
+                            <td colSpan="9" style={{textAlign: "center"}}>No hay rifles en este momento</td>
                             </tr>
                         )
                     }
@@ -130,4 +144,4 @@ const Delete = () => {
     )
 }
 
-export default Delete
+export default DeleteRifle

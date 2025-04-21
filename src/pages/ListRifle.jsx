@@ -5,14 +5,13 @@ import "../styles/crud.css"
 
 const API_URL = 'http://localhost:8080/Arma'
 
-const List = () => { 
+const ListRifle = () => { 
     const [rifles, setRifles] = useState([])
 
     const handleClick = () => {
         axios.get(`${API_URL}/`)
         .then(({ data }) => {
-        console.log("data del get:")
-        console.log(data)
+        console.log("data del get:", data)
         setRifles(data)
         })
         .catch((error) => {
@@ -31,13 +30,14 @@ const List = () => {
             <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Cadencia disparo</th>
                 <th>Cap. Municion</th>
-                <th>Daño</th>
+                <th>Daño</th> 
                 <th>Fecha Creacion</th>
-                <th>Munición</th>
+                <th>Munición</th> 
                 <th>Velocidad</th>
                 <th>Vida</th>
+                <th>Distancia</th>
+                <th>Tipo munición</th>
             </tr>
             </thead>
             <tbody>
@@ -47,7 +47,6 @@ const List = () => {
                     return (rifles.map((rifle, index) => (
                         <tr key={index}>
                         <td>{rifle.nombre}</td>
-                        <td>{rifle.cadenciaDisparo}</td>
                         <td>{rifle.capMunicion}</td>
                         <td>{rifle.daño}</td>
                         <td>{(() => {
@@ -60,12 +59,26 @@ const List = () => {
                         <td>{rifle.municion}</td>
                         <td>{rifle.velocidad}</td>
                         <td>{rifle.vida}</td>
+                        <td>{rifle.distancia}</td>
+                        <td>{
+                            (() => {
+                                if (rifle.tipoMunicion === null) {
+                                    return <span style={{color: "red"}}>No hay munición (Arma Inútil)</span>
+                                }
+                                const {cadencia, dañoArea, nombre} = rifle.tipoMunicion
+                                return <>
+                                    <li style={{listStyleType: 'circle'}}>Cadencia: {cadencia}</li>
+                                    <li style={{listStyleType: 'circle'}}>Daño Area: {dañoArea ? "true" : "false"}</li>
+                                    <li style={{listStyleType: 'circle'}}>Nombre: {nombre}</li>
+                                </>
+                            })()
+                        }</td>
                         </tr>
                     )))
                 }
                 return (
                     <tr>
-                    <td colSpan="8" style={{textAlign: "center"}}>No hay rifles en este momento</td>
+                    <td colSpan="9" style={{textAlign: "center"}}>No hay rifles en este momento</td>
                     </tr>
                 )
             })()
@@ -77,4 +90,4 @@ const List = () => {
     </div>
     )
 }
-export default List
+export default ListRifle

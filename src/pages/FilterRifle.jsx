@@ -4,7 +4,7 @@ import "../styles/crud.css"
 
 const API_URL = 'http://localhost:8080/Arma'
 
-const Read = () => {
+const ReadRifle = () => {
     const [rifleFilName, setRifleFilName] = useState({
         nombre: '',
     })
@@ -89,7 +89,7 @@ const Read = () => {
             <form name='formName' onSubmit={handleSubmit}>
                 <div>
                     <label>Nombre</label>
-                    <input name="nombre" value={rifleFilName.nombre} onChange={handleInputChangeName} type="text" />
+                    <input name="nombre" value={rifleFilName.nombre} onChange={handleInputChangeName} type="text" required/>
                 </div>
                 <button className='btnSubmit' type='submit'>Consultar</button>
             </form>
@@ -100,13 +100,14 @@ const Read = () => {
                 <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Cadencia disparo</th>
                     <th>Cap. Municion</th>
-                    <th>Daño</th>
+                    <th>Daño</th> 
                     <th>Fecha Creacion</th>
-                    <th>Munición</th>
+                    <th>Munición</th> 
                     <th>Velocidad</th>
                     <th>Vida</th>
+                    <th>Distancia</th>
+                    <th>Tipo munición</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -115,20 +116,30 @@ const Read = () => {
                     if (rifleName) {
                         return (
                             <tr key={rifleName.index}>
-                            <td>{rifleName.nombre}</td>
-                            <td>{rifleName.cadenciaDisparo}</td>
-                            <td>{rifleName.capMunicion}</td>
-                            <td>{rifleName.dano}</td>
-                            <td>{rifleName.fechaCreacion}</td>
-                            <td>{rifleName.municion}</td>
-                            <td>{rifleName.velocidad}</td>
-                            <td>{rifleName.vida}</td>
+                                <td>{rifleName.nombre}</td>
+                                <td>{rifleName.capMunicion}</td>
+                                <td>{rifleName.dano}</td>
+                                <td>{rifleName.fechaCreacion}</td>
+                                <td>{rifleName.municion}</td>
+                                <td>{rifleName.velocidad}</td>
+                                <td>{rifleName.vida}</td>
+                                <td>{rifleName.distancia}</td>
+                                <td>{
+                                    (() => {
+                                        const {cadencia, dañoArea, nombre} = rifleName.tipoMunicion
+                                        return <>
+                                            <li style={{listStyleType: 'circle'}}>Cadencia: {cadencia}</li>
+                                            <li style={{listStyleType: 'circle'}}>Daño Area: {dañoArea ? "true" : "false"}</li>
+                                            <li style={{listStyleType: 'circle'}}>Nombre: {nombre}</li>
+                                        </>
+                                    })()
+                                }</td>
                             </tr>
                         )
                     } 
                     return (
                         <tr>
-                        <td colSpan="8" style={{textAlign: "center"}}>No hay rifles en este momento</td>
+                        <td colSpan="9" style={{textAlign: "center"}}>No hay rifles en este momento</td>
                         </tr>
                     )
                 })()
@@ -140,15 +151,15 @@ const Read = () => {
         
         <div className='read-container'>
         <div className='container-content'>
-            <h1>Listar por vida minima y nombre</h1>
+            <h1>Listar por vida y daño minimo</h1>
             <form name='formHD' onSubmit={handleSubmit}>
                 <div>
                     <label>Vida mínima</label>
-                    <input name="vida_minima" value={rifleFilHD.vida_minima === "" ? "" : rifleFilHD.vida_minima || ""} onChange={handleInputChange} type="number" min="0" />
+                    <input name="vida_minima" value={rifleFilHD.vida_minima === "" ? "" : rifleFilHD.vida_minima || ""} onChange={handleInputChange} type="number" min="0" required/>
                 </div>
                 <div>
                     <label>Daño mínimo</label>
-                    <input name="dano_minimo" value={rifleFilHD.dano_minimo === "" ? "" : rifleFilHD.dano_minimo || ""} onChange={handleInputChange} type="number" min="0" />
+                    <input name="dano_minimo" value={rifleFilHD.dano_minimo === "" ? "" : rifleFilHD.dano_minimo || ""} onChange={handleInputChange} type="number" min="0" required/>
                 </div>
                 <button className='btnSubmit' type='submit'>Listar</button>
             </form>
@@ -159,13 +170,14 @@ const Read = () => {
                 <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Cadencia disparo</th>
                     <th>Cap. Municion</th>
-                    <th>Daño</th>
+                    <th>Daño</th> 
                     <th>Fecha Creacion</th>
-                    <th>Munición</th>
+                    <th>Munición</th> 
                     <th>Velocidad</th>
                     <th>Vida</th>
+                    <th>Distancia</th>
+                    <th>Tipo munición</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -174,26 +186,36 @@ const Read = () => {
                     if (riflesHD.length > 0) {
                         return (riflesHD.map((rifle) => (
                             <tr key={rifle.index}>
-                            <td>{rifle.nombre}</td>
-                            <td>{rifle.cadenciaDisparo}</td>
-                            <td>{rifle.capMunicion}</td>
-                            <td>{rifle.daño}</td>
-                            <td>{(() => {
-                                let year = rifle.fechaCreacion[0]
-                                let month = rifle.fechaCreacion[1]
-                                let day = rifle.fechaCreacion[2]
-                                return `${year}-${month}-${day}`
-                            })()}
-                            </td>
-                            <td>{rifle.municion}</td>
-                            <td>{rifle.velocidad}</td>
-                            <td>{rifle.vida}</td>
+                                <td>{rifle.nombre}</td>
+                                <td>{rifle.capMunicion}</td>
+                                <td>{rifle.dano}</td>
+                                <td>{(() => {
+                                    let year = rifle.fechaCreacion[0]
+                                    let month = rifle.fechaCreacion[1]
+                                    let day = rifle.fechaCreacion[2]
+                                    return `${year}-${month}-${day}`
+                                })()}
+                                </td>
+                                <td>{rifle.municion}</td>
+                                <td>{rifle.velocidad}</td>
+                                <td>{rifle.vida}</td>
+                                <td>{rifle.distancia}</td>
+                                <td>{
+                                    (() => {
+                                        const {cadencia, dañoArea, nombre} = rifle.tipoMunicion
+                                        return <>
+                                            <li style={{listStyleType: 'circle'}}>Cadencia: {cadencia}</li>
+                                            <li style={{listStyleType: 'circle'}}>Daño Area: {dañoArea ? "true" : "false"}</li>
+                                            <li style={{listStyleType: 'circle'}}>Nombre: {nombre}</li>
+                                        </>
+                                    })()
+                                }</td>
                             </tr>
                         )))
                     }
                     return (
                         <tr>
-                        <td colSpan="8" style={{textAlign: "center"}}>No hay rifles en este momento</td>
+                        <td colSpan="9" style={{textAlign: "center"}}>No hay rifles en este momento</td>
                         </tr>
                     )
                 })()
@@ -207,4 +229,4 @@ const Read = () => {
 
 }
 
-export default Read
+export default ReadRifle

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import MyCalendar from './Calendar.jsx'
+import MyCalendar from '../components/Calendar.jsx'
 import "../styles/crud.css"
 
 const NUMBER_INPUTS = ['dano', 'municion', 'vida', 'velocidad']
 const API_URL = 'http://localhost:8080/Arma'
 
-const Update = () => {
+const UpdateRifle = () => {
     const [searchName, setSearchName] = useState('')
   
     const [rifleFound, setRifleFound] = useState(null)
@@ -14,14 +14,16 @@ const Update = () => {
 
     const handleFindRifle = () => {
         if (!searchName.trim()) return
-        
         axios.post(`${API_URL}/buscarNombre`, { nombre: searchName })
         .then(({ data }) => {
+            console.log("Data del find rifle", data)
             setRifleFound(data)
-        })
-        .catch((error) => {
+        }).catch((error) => {
+            if (error.status === 404) {
+                alert("Rifle no encontrado")
+            }
             setRifleFound(null)
-            console.error("Error al buscar rifle:", error)
+            console.error("Error al buscar rifle:", error.message)
         })
     }
 
@@ -94,7 +96,7 @@ const Update = () => {
             <h2>Buscar Rifle</h2>
             <div className='search-form'>
                 <label htmlFor="search-name">Nombre del Rifle:</label>
-                <input id="search-name" name="searchName" value={searchName} onChange={handleSearchChange} type="text" />
+                <input id="search-name" name="searchName" value={searchName} onChange={handleSearchChange} type="text" required/>
                 <button className='btnSubmit' onClick={handleFindRifle}>Buscar</button>
             </div>
             {
@@ -105,30 +107,43 @@ const Update = () => {
                         <table>
                         <thead>
                             <tr>
-                            <th>Nombre</th>
-                            <th>Cadencia</th>
-                            <th>Cap. Munición</th>
-                            <th>Daño</th>
-                            <th>Fecha Creación</th>
-                            <th>Munición</th>
-                            <th>Velocidad</th>
-                            <th>Vida</th>
-                            <th>Acción</th>
+                                <th>Nombre</th>
+                                <th>Cap. Municion</th>
+                                <th>Daño</th> 
+                                <th>Fecha Creacion</th>
+                                <th>Munición</th> 
+                                <th>Velocidad</th>
+                                <th>Vida</th>
+                                <th>Distancia</th>
+                                <th>Tipo munición</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                            <td>{rifleFound.nombre}</td>
-                            <td>{rifleFound.cadenciaDisparo}</td>
-                            <td>{rifleFound.capMunicion}</td>
-                            <td>{rifleFound.dano}</td>
-                            <td>{rifleFound.fechaCreacion}</td>
-                            <td>{rifleFound.municion}</td>
-                            <td>{rifleFound.velocidad}</td>
-                            <td>{rifleFound.vida}</td>
-                            <td>
-                                <button className='btnSubmit' onClick={handleSelectRifle}>Editar</button>
-                            </td>
+                                <td>{rifleFound.nombre}</td>
+                                <td>{rifleFound.capMunicion}</td>
+                                <td>{rifleFound.daño}</td>
+                                <td>{rifleFound.fechaCreacion}</td>
+                                <td>{rifleFound.municion}</td>
+                                <td>{rifleFound.velocidad}</td>
+                                <td>{rifleFound.vida}</td>
+                                <td>{rifleFound.distancia}</td>
+                                <td>{
+                                    (() => {
+                                        if (rifleFound.tipoMunicion === null) {
+                                            return <span style={{color: "red"}}>No hay munición (Arma Inútil)</span>
+                                        }
+                                        const {cadencia, dañoArea, nombre} = rifleFound.tipoMunicion
+                                        return <>
+                                            <li style={{listStyleType: 'circle'}}>Cadencia: {cadencia}</li>
+                                            <li style={{listStyleType: 'circle'}}>Daño Area: {dañoArea ? "true" : "false"}</li>
+                                            <li style={{listStyleType: 'circle'}}>Nombre: {nombre}</li>
+                                        </>
+                                    })()
+                                }</td>
+                                <td>
+                                    <button className='btnSubmit' onClick={handleSelectRifle}>Editar</button>
+                                </td>
                             </tr>
                         </tbody>
                         </table>
@@ -224,4 +239,4 @@ const Update = () => {
     )
 }
 
-export default Update
+export default UpdateRifle
