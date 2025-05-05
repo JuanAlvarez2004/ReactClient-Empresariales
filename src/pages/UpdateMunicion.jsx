@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import MyCalendar from '../components/Calendar.jsx'
 import "../styles/crud.css"
 
 const NUMBER_INPUTS = ['cadencia']
@@ -35,13 +34,14 @@ const UpdateMunicion = () => {
     const handleSelectMunicion = () => {
         if (!municionFound) return
         
-        axios.post(`${API_URL}/buscar/`, { indice: municionFound.index })
+        axios.post(`${API_URL}/buscar/`, { id: municionFound.id })
         .then(({ data }) => {
-            const { index, ...restData } = data
-            setMunicionToUpdate({
-                ...restData,
-                indice: index,
-            })
+            // const { index, ...restData } = data
+            // setMunicionToUpdate({
+            //     ...restData,
+            //     indice: index,
+            // })
+            setMunicionToUpdate(data)
         })
         .catch((error) => {
             console.error("Error al obtener detalles:", error)

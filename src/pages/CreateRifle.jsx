@@ -131,7 +131,7 @@ const CreateRifle = () => {
                                 </thead>
                                 <tbody>
                                     {municiones.map((m) => (
-                                        <tr key={m.index}>
+                                        <tr key={m.id}>
                                         <td>{m.nombre}</td>
                                         <td>{m.cadencia}</td>
                                         <td>{m.dañoArea.toString()}</td>

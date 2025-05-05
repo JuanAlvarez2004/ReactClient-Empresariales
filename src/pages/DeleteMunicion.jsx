@@ -43,7 +43,7 @@ const DeleteRifle = () => {
             return
         } 
 
-        const data = { indice: municion.index }
+        const data = { id: municion.id }
         if (confirm("¿Estás seguro de que quieres borrar esta munición? \nLos rifles asociados a esta munición no podrán usarla y cambiarán a la predeterminada.")) {
             axios.delete(`${API_URL}/`, { data: data })
             .then(({ status }) => {

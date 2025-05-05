@@ -35,14 +35,15 @@ const UpdateRifle = () => {
     const handleSelectRifle = () => {
         if (!rifleFound) return
         
-        axios.post(`${API_URL}/buscar`, { indice: rifleFound.index, tipo: 'Rifle' })
+        axios.post(`${API_URL}/buscar`, { id: rifleFound.id, tipo: 'Rifle' })
         .then(({ data }) => {
-            const { index, ...restData } = data
-            setRifleToUpdate({
-                ...restData,
-                indice: index,
-                tipo: 'Rifle'
-            })
+            // const { index, ...restData } = data
+            // setRifleToUpdate({
+            //     ...restData,
+            //     id: index,
+            //     tipo: 'Rifle'
+            // })
+            setRifleToUpdate(data)
         })
         .catch((error) => {
             console.error("Error al obtener detalles:", error)

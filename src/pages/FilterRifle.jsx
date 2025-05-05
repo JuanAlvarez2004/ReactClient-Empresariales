@@ -74,7 +74,8 @@ const ReadRifle = () => {
                     })
                 })
                 .catch((error) => {
-                    const { message } = error
+                    const { response , message } = error
+                    alert(response.data)
                     console.error("Error al obtener los datos de vida:", message);
                 })
         }
@@ -115,10 +116,10 @@ const ReadRifle = () => {
                 (() => {
                     if (rifleName) {
                         return (
-                            <tr key={rifleName.index}>
+                            <tr key={rifleName.id}>
                                 <td>{rifleName.nombre}</td>
                                 <td>{rifleName.capMunicion}</td>
-                                <td>{rifleName.dano}</td>
+                                <td>{rifleName.daño}</td>
                                 <td>{rifleName.fechaCreacion}</td>
                                 <td>{rifleName.municion}</td>
                                 <td>{rifleName.velocidad}</td>
@@ -185,10 +186,10 @@ const ReadRifle = () => {
                 (() => {
                     if (riflesHD.length > 0) {
                         return (riflesHD.map((rifle) => (
-                            <tr key={rifle.index}>
+                            <tr key={rifle.id}>
                                 <td>{rifle.nombre}</td>
                                 <td>{rifle.capMunicion}</td>
-                                <td>{rifle.dano}</td>
+                                <td>{rifle.daño}</td>
                                 <td>{(() => {
                                     let year = rifle.fechaCreacion[0]
                                     let month = rifle.fechaCreacion[1]

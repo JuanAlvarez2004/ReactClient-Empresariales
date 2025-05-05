@@ -44,7 +44,7 @@ const DeleteRifle = () => {
             return
         } 
 
-        const data = { indice: rifle.index, tipo: rifle.tipo = delRifle.tipo }
+        const data = { id: rifle.id, tipo: rifle.tipo = delRifle.tipo }
         if (confirm("¿Estás seguro de que quieres borrar esta arma?")) {
             axios.delete(`${API_URL}/`, { data: data })
             .then(({ status }) => {
