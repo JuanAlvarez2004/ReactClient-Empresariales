@@ -118,7 +118,7 @@ const ReadMunicion = () => {
                     (() => {
                         if (municionName) {
                             return (
-                                <tr key={municionName.index}>
+                                <tr key={municionName.id}>
                                     <td>{municionName.nombre}</td>
                                     <td>{municionName.cadencia}</td>
                                     <td>{String(municionName.danoArea)}</td>
@@ -174,7 +174,7 @@ const ReadMunicion = () => {
                 (() => {
                     if (municionesCD.length > 0) {
                         return (municionesCD.map((municion) => (
-                            <tr key={municion.index}>
+                            <tr key={municion.id}>
                             <td>{municion.nombre}</td>
                             <td>{municion.cadencia}</td>
                             <td>{String(municion.dañoArea)}</td>

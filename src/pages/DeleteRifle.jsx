@@ -98,7 +98,7 @@ const DeleteRifle = () => {
                 (() => {
                     if (Object.keys(rifle).length !== 0) {
                         return (
-                            <tr key={rifle.index}>
+                            <tr key={rifle.id}>
                                 <td>{rifle.nombre}</td>
                                 <td>{rifle.capMunicion}</td>
                                 <td>{rifle.daño}</td>

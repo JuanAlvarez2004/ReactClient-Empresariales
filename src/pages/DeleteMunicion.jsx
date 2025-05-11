@@ -90,7 +90,7 @@ const DeleteRifle = () => {
                 (() => {
                     if (Object.keys(municion).length !== 0) {
                         return (
-                            <tr key={municion.index}>
+                            <tr key={municion.id}>
                                 <td>{municion.nombre}</td>
                                 <td>{municion.cadencia}</td>
                                 <td>{String(municion.danoArea)}</td>
